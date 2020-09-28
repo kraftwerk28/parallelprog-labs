@@ -21,6 +21,7 @@ fn seq_sum(v1: &Vec<i32>, v2: &Vec<i32>) -> (Vec<i32>, u128) {
 
 // Parallel sum
 fn par_sum(v1: &Vec<i32>, v2: &Vec<i32>, nthreads: usize) -> (Vec<i32>, u128) {
+
     let zipped = v1
         .iter()
         .zip(v2.iter())
@@ -72,4 +73,5 @@ fn main() {
             seq_time as f64 / par_time as f64,
         );
     }
+
 }
