@@ -7,6 +7,7 @@ pub struct CPUTask {
 }
 
 impl CPUTask {
+    #[allow(dead_code)]
     pub fn new(processing_time: u64) -> Self {
         Self { processing_time }
     }

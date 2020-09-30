@@ -1,4 +1,4 @@
-use std::{env, thread, time::Duration};
+use std::{env, process::exit, thread, time::Duration};
 pub fn sleep_ms(millis: u64) {
     thread::sleep(Duration::from_millis(millis));
 }
@@ -14,5 +14,8 @@ pub fn parse_args() -> (usize, usize) {
     arglist
         .get(0)
         .and_then(|&n| arglist.get(1).and_then(|&q| Some((n, q))))
-        .expect(USAGE)
+        .unwrap_or_else(|| {
+            println!("{}", USAGE);
+            exit(1);
+        })
 }

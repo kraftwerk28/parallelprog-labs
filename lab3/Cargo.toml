@@ -1,17 +1,9 @@
 [package]
-name = "lab2"
+name = "lab3"
 version = "0.1.0"
 authors = ["kraftwerk28 <kefirchik3@gmail.com>"]
 edition = "2018"
-default-run = "main"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-crossbeam = "0.7.3"
-rand = "0.7.3"
-signal-hook = "0.1.16"
-
-[[bin]]
-name = "main"
-path = "src/main.rs"
