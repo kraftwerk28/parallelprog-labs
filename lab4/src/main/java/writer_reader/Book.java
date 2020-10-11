@@ -1,6 +1,7 @@
 package writer_reader;
 
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -14,10 +15,11 @@ public class Book {
     }
 
     private final LinkedList<Page> pages = new LinkedList<>();
-    private final ReentrantLock lck = new ReentrantLock();
+    private final ReentrantLock lck = new ReentrantLock(true);
     private final Condition readingCondvar = lck.newCondition();
     private final Condition publishCondvar = lck.newCondition();
     private int nreaders = 0;
+    private static Random rng = new Random();
 
     public final void publishPage(final Page page) {
         lck.lock();
@@ -35,11 +37,6 @@ public class Book {
             e.printStackTrace();
         } finally {
             lck.unlock();
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -60,7 +57,7 @@ public class Book {
             final var page = pages.get(pageIndex);
             System.out.println("Reader " + reader.getName() +
                     " read page with " + page.nchars + " characters.");
-            Thread.sleep(page.nchars);
+            Thread.sleep(page.nchars + rng.nextInt(1000));
 
             lck.lock();
             nreaders--;

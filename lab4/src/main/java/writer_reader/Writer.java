@@ -14,7 +14,7 @@ public class Writer implements Runnable {
     @Override
     public void run() {
         while (true) {
-            var page = new Book.Page(rng.nextInt(1000) + 3000);
+            var page = new Book.Page(rng.nextInt(1000) + 1000);
             book.publishPage(page);
         }
     }
