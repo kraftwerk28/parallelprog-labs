@@ -38,7 +38,9 @@ impl CPUQueue {
         spawn(move || {
             let (mtx, cvar) = &*self.monitor;
             let mut rng = thread_rng();
+
             loop {
+
                 if stop_flag.load(Acquire) {
                     println!("Stopping {}", self.label);
                     if let Some(_) = self.fixed_size {

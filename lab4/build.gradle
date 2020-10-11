@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:29.0-jre'
+}
+
+sourceSets.main.java
+        .getSrcDirs()
+        .collect { it.listFiles() }
+        .flatten()
+        .collect { it.name }
+        .forEach { name ->
+            def mainClass = "${name}.Main"
+            tasks.create(name, JavaExec) {
+                classpath = sourceSets.main.runtimeClasspath
+                main = mainClass
+            }
+            tasks.create("${name}Jar", Jar) {
+                manifest {
+                    attributes('Main-Class': mainClass)
+                }
+                archiveName("${name}.jar")
+                from sourceSets.main.output
+            }
+        }
+
+task buildAllJars {
+    tasks
+            .findAll { it.name ==~ /.+Jar$/ }
+            .forEach { dependsOn it }
+}
