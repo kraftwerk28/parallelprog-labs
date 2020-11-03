@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+application {
+    // Define the main class for the application.
+    mainClassName = 'lab5.Main'
+}

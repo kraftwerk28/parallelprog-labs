@@ -29,7 +29,9 @@ public class TaskQueue {
                 e.printStackTrace();
             }
         }
-        return queue.remove(0);
+        var task =  queue.remove(0);
+        notify();
+        return task;
     }
     public void report() {
         System.out.println("Tasks in queue: " + queue.size() + ".");
