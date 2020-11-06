@@ -8,9 +8,10 @@ public class Lab3 {
     public static int countElems(final int[] list, Predicate<Integer> predicate) {
         final var result = new AtomicInteger(0);
         IntStream.of(list).parallel().forEach((elem) -> {
-            if (predicate.test(elem)) {
-                result.incrementAndGet();
-            }
+            int current;
+            do {
+                current = result.get();
+            } while (!result.compareAndSet(current, current + 1));
         });
         return result.get();
     }
@@ -22,13 +23,13 @@ public class Lab3 {
         public final int maxIndex;
 
         ListMinMax(
-                final AtomicInteger minValue,
-                final AtomicInteger maxValue,
+                final int minValue,
+                final int maxValue,
                 final AtomicInteger minIndex,
                 final AtomicInteger maxIndex
         ) {
-            this.minValue = minValue.get();
-            this.maxValue = maxValue.get();
+            this.minValue = minValue;
+            this.maxValue = maxValue;
             this.minIndex = minIndex.get();
             this.maxIndex = maxIndex.get();
         }
@@ -41,28 +42,33 @@ public class Lab3 {
     }
 
     public static ListMinMax findMinMax(final int[] list) {
-        final var maxValue = new AtomicInteger(Integer.MIN_VALUE);
-        final var minValue = new AtomicInteger(Integer.MAX_VALUE);
         final var maxIndex = new AtomicInteger();
         final var minIndex = new AtomicInteger();
         IntStream.range(0, list.length).parallel().forEach((index) -> {
             final var elem = list[index];
-            if (maxValue.get() < elem) {
-                maxIndex.set(index);
-                maxValue.set(elem);
-            }
-            if (minValue.get() > elem) {
-                minIndex.set(index);
-                minValue.set(elem);
-            }
+            int prevMaxIndex;
+            int prevMinIndex;
+            do {
+                prevMaxIndex = maxIndex.get();
+            } while (list[prevMaxIndex] < elem &&
+                    !maxIndex.compareAndSet(prevMaxIndex, index));
+            do {
+                prevMinIndex = minIndex.get();
+            } while (list[prevMinIndex] > elem &&
+                    !minIndex.compareAndSet(prevMinIndex, index));
         });
-        return new ListMinMax(minValue, maxValue, minIndex, maxIndex);
+        return new ListMinMax(list[minIndex.get()], list[maxIndex.get()],
+                minIndex, maxIndex);
     }
 
     public static int xorList(final int[] list) {
         final var result = new AtomicInteger(list[0]);
         IntStream.of(list).parallel().forEach((elem) -> {
-            result.set(result.get() ^ elem);
+            int currentHash;
+            do {
+                currentHash = result.get();
+            } while (!result.compareAndSet(currentHash,
+                    currentHash ^ elem));
         });
         return result.get();
     }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        final var inList = randList(100);
+        final var inList = randList(100000000);
 
         System.out.println(Lab3.countElems(inList,
                 (elem) -> elem > 25 && elem <= 75));
