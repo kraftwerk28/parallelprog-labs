@@ -1,0 +1,15 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-pthread",
+      "-o",
+      "lab6",
+      "main.c"
+    ],
+    "directory": "/home/kraftwerk28/projects/haskell/parallelprog-labs/lab6-c",
+    "file": "/home/kraftwerk28/projects/haskell/parallelprog-labs/lab6-c/main.c",
+    "output": "/home/kraftwerk28/projects/haskell/parallelprog-labs/lab6-c/main.o"
+  }
+]
