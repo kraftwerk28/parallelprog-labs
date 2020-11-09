@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
   if (rank == RANK_MASTER) {
     proc_result = master_proc();
   } else {
-    proc_result = worker_proc();
+    proc_result = worker_proc(rank);
   }
 
   MPI_Finalize();

@@ -21,17 +21,18 @@ void print_arr(int* arr, size_t len) {
   free(buf);
 }
 
-void rand_array(int* buf, size_t length) {
+void shuffle_arr(int* buf, size_t length) {
   FOR(i, 0, length) { buf[i] = rand() % length; }
 }
 
 typedef struct {
   int* arr1_start;
   int* arr2_start;
-  int chunk_size;
+  int* result_start;
+  size_t chunk_size;
 } chunk_t;
 
-chunk_t* split_arr(int* arr1, int* arr2, size_t arr_size, int nproc) {
+chunk_t* split_arr(int* arr1, int* arr2, int* res, size_t arr_size, int nproc) {
   int chunk_size = (int)ceil(arr_size / (double)nproc);
   int chunk_index = 0;
   chunk_t* chunks = NEW(chunk_t, nproc);
@@ -40,6 +41,7 @@ chunk_t* split_arr(int* arr1, int* arr2, size_t arr_size, int nproc) {
     chunks[chunk_index] =
         (chunk_t){.arr1_start = arr1 + offset,
                   .arr2_start = arr2 + offset,
+                  .result_start = res + offset,
                   .chunk_size = MIN(chunk_size, arr_size - offset)};
     chunk_index++;
   } while (chunk_index < nproc);
@@ -47,11 +49,14 @@ chunk_t* split_arr(int* arr1, int* arr2, size_t arr_size, int nproc) {
 }
 
 void print_chunk(chunk_t* chunk, int* arr1, int* arr2) {
-  printf("start1 = %p, start2 = %p, length = %d\n", chunk->arr1_start,
+  printf("start1 = %p, start2 = %p, length = %ld\n", chunk->arr1_start,
          chunk->arr2_start, chunk->chunk_size);
-  print_arr(chunk->arr1_start, chunk->chunk_size);
-  print_arr(chunk->arr2_start, chunk->chunk_size);
-  printf("\n");
+}
+
+size_t get_comm_size() {
+  int rank;
+  MPI_Comm_size(MPI_COMM_WORLD, &rank);
+  return (size_t)rank;
 }
 
 #endif
