@@ -6,7 +6,7 @@
 #include <string.h>
 #include "utils.h"
 
-#define ARR_SIZE 1000000
+#define ARR_SIZE 9050
 
 void send_chunks(chunk_t* chunks, size_t nproc) {
   for (size_t i = 0, chunk_index = 0; i < nproc; i++) {
